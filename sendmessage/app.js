@@ -6,8 +6,10 @@ const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
 
 const { TABLE_NAME } = process.env;
+const { API_ENDPOINT } = process.env;
 
 exports.handler = async event => {
+  console.log(event)
   let connectionData;
   
   try {
@@ -18,10 +20,13 @@ exports.handler = async event => {
   
   const apigwManagementApi = new AWS.ApiGatewayManagementApi({
     apiVersion: '2018-11-29',
-    endpoint: event.requestContext.domainName + '/' + event.requestContext.stage
+    // endpoint: event.requestContext.domainName + '/' + event.requestContext.stage
+    endpoint: 'mkov9j7xog.execute-api.us-east-2.amazonaws.com/Prod'
   });
+  // 'mkov9j7xog.execute-api.us-east-2.amazonaws.com/Prod'
   
-  const postData = JSON.parse(event.body).data;
+  // const postData = JSON.parse(event.body).data;
+  const postData = event.body;
   
   const postCalls = connectionData.Items.map(async ({ connectionId }) => {
     try {
